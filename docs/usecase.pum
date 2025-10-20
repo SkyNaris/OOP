@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+title Діаграма варіантів використання — Створення логотипу
+
+actor "Замовник" as Client
+actor "Дизайнер" as Designer
+
+usecase UC_Brief        as "Заповнити бриф"
+usecase UC_Concepts     as "Надіслати 3 концепти логотипу"
+usecase UC_Edits        as "Погодити правки"
+usecase UC_Final        as "Затвердити фінал"
+usecase UC_GuideFiles   as "Передати гайдлайн і файли"
+
+Client --> UC_Brief
+Client --> UC_Edits
+Client --> UC_Final
+
+Designer --> UC_Concepts
+Designer --> UC_GuideFiles
+
+UC_Brief --> UC_Concepts
+UC_Concepts --> UC_Edits
+UC_Edits --> UC_Final
+UC_Final --> UC_GuideFiles
+@enduml

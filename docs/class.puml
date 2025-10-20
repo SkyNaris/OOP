@@ -1,0 +1,68 @@
+classDiagram
+    %% Інтерфейс
+    class ILogoProcess {
+        <<interface>>
+        +sendConcepts()
+        +sendFinalFiles()
+    }
+
+    %% Абстрактний клас
+    class Person {
+        <<abstract>>
+        -name: String
+        +Person(name: String)
+        +getName(): String
+        #finalizeContract()$
+    }
+
+    %% Designer
+    class Designer {
+        +Designer(name: String)
+        +sendConcepts()
+        +sendFinalFiles()
+        +createGuideline(): Guideline
+    }
+
+    %% Customer
+    class Customer {
+        +Customer(name: String)
+        +fillBrief(): Brief
+        +acceptConcepts()
+        +approveEdits()
+    }
+
+    %% Brief
+    class Brief {
+        -details: String
+        +Brief(details: String)
+        +getDetails(): String
+    }
+
+    %% Guideline
+    class Guideline {
+        -fileUrl: String
+        +Guideline(url: String)
+        +download()
+    }
+
+    %% Logo
+    class Logo {
+        -conceptNum: int
+        +Logo(num: int)
+        +showConcept()
+    }
+
+    %% Відносини
+    Person <|-- Designer : Наслідування
+    Person <|-- Customer : Наслідування
+    Designer ..|> ILogoProcess : Реалізація
+    Designer o-- Guideline : Агрегація
+    Designer *-- Logo : Композиція
+    Customer --> Brief : Асоціація
+
+    %% Фінальний метод
+    note for Person "finalizeContract() - фінальний метод"
+
+    %% Короткі описові нотатки
+    note for Designer "Дизайнер: надсилає концепти, фінал, гайдлайн"
+    note for Customer "Замовник: заповнює бриф, погоджує правки, фінал"
