@@ -12,6 +12,7 @@ classDiagram
         -name: String
         +Person(name: String)
         +getName(): String
+        +setName(name: String)
         #finalizeContract()$
     }
 
@@ -23,20 +24,50 @@ classDiagram
         +createGuideline(): Guideline
     }
 
-    %% Customer
+    %% --- НОВІ ТА ОНОВЛЕНІ КЛАСИ ДЛЯ DI ---
+
+    %% Customer (Оновлено: додано DesignService)
     class Customer {
-        +Customer(name: String)
+        -designService: DesignService
+        +Customer(designService: DesignService)
         +fillBrief(): Brief
         +acceptConcepts()
         +approveEdits()
     }
 
-    %% Brief
-    class Brief {
-        -details: String
-        +Brief(details: String)
-        +getDetails(): String
+    %% DesignService (Новий клас сервісу)
+    class DesignService {
+        -connection: Connection
+        +DesignService(connection: Connection)
+        +saveBrief(brief: Brief)
     }
+
+    %% DesignModule (Новий клас модуля Guice)
+    class DesignModule {
+        <<Guice Module>>
+        +configure()
+        +provideConnection(url: String): Connection
+    }
+
+    %% JDBC Classes (Для відображення роботи з БД)
+    class Connection {
+        <<JDBC Interface>>
+    }
+
+    class SQLiteDriver {
+        <<JDBC Driver>>
+    }
+
+    %% Brief (Оновлено поля)
+    class Brief {
+        -title: String
+        -description: String
+        +Brief(title: String)
+        +getTitle(): String
+        +getDescription(): String
+    }
+
+    %% --- ІНШІ КЛАСИ ---
 
     %% Guideline
     class Guideline {
@@ -52,17 +83,29 @@ classDiagram
         +showConcept()
     }
 
-    %% Відносини
+    %% --- ВІДНОСИНИ ---
+
+    %% Спадкування
     Person <|-- Designer : Наслідування
     Person <|-- Customer : Наслідування
+    
+    %% Реалізація інтерфейсів
     Designer ..|> ILogoProcess : Реалізація
+    SQLiteDriver --|> Connection : Реалізація
+
+    %% Впровадження залежностей (DI)
+    DesignModule ..> Connection : <<provides>>
+    DesignService o-- Connection : Агрегація (використовує)
+    Customer *-- DesignService : Композиція (впроваджено)
+    
+    %% Використання даних
+    Customer ..> Brief : Створює
+    DesignService ..> Brief : Зберігає (Uses)
+
+    %% Інші зв'язки
     Designer o-- Guideline : Агрегація
     Designer *-- Logo : Композиція
-    Customer --> Brief : Асоціація
 
-    %% Фінальний метод
-    note for Person "finalizeContract() - фінальний метод"
-
-    %% Короткі описові нотатки
-    note for Designer "Дизайнер: надсилає концепти, фінал, гайдлайн"
-    note for Customer "Замовник: заповнює бриф, погоджує правки, фінал"
+    %% Нотатки
+    note for DesignModule "Налаштовує Guice\nта створює з'єднання з БД"
+    note for Customer "Отримує сервіс через конструктор\nта зберігає бриф у БД"

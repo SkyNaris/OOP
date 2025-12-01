@@ -1,37 +1,16 @@
-# OOP Project
+# Design Project Simulation
 
-## Компіляція та запуск
+Цей проєкт демонструє використання Dependency Injection (Google Guice) та роботу з базою даних SQLite.
 
-1. Перейдіть в каталог з вихідним кодом:
-```bash
-cd pr_2/src
-```
+## Структура
+- `src/main/java/com/design/Customer.java` - Головний клас сутності.
+- `src/main/java/com/design/Brief.java` - Клас-залежність (частина композиції).
+- `src/main/java/com/design/DesignModule.java` - Налаштування Guice (DI).
+- `src/main/java/com/design/DesignService.java` - Сервіс для запису в БД.
+- `src/main/java/com/design/Main.java` - Точка входу.
 
-2. Скомпілюйте всі Java файли:
-```bash
-javac *.java
-```
+## Як зібрати
+mvn clean install
 
-3. Запустіть програму:
-```bash
-java Main
-```
-
-## Структура проєкту
-
-- `src/` - каталог з вихідним кодом
-  - `ILogoProcess.java` - інтерфейс процесу розробки логотипу
-  - `Person.java` - абстрактний клас особи
-  - `Designer.java` - клас дизайнера
-  - `Customer.java` - клас замовника
-  - `Brief.java` - клас брифу
-  - `Logo.java` - клас логотипу
-  - `Guideline.java` - клас гайдлайну
-  - `Main.java` - головний клас програми
-
-- `docs/` - каталог з документацією
-  - `requirements.md` - вимоги до програми
-  - `usecase.puml` - UML-діаграма варіантів використання
-  - `class.puml` - UML-діаграма класів
-  - `sequence.puml` - UML-діаграма послідовності
-  - `state.puml` - UML-діаграма станів
+## Як запустити
+mvn exec:java -Dexec.mainClass="com.design.Main"
