@@ -1,7 +1,9 @@
 package com.design;
 
-import com.google.inject.Guice;     // Імпорт Guice
-import com.google.inject.Injector;  // Імпорт Injector
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+// Додаємо імпорт для веб-сервера
+import com.design.webserver.WebServer;
 
 /**
  * Головний клас програми
@@ -12,23 +14,17 @@ public class Main {
         // Створюємо інжектор на основі нашого модуля (DesignModule)
         Injector injector = Guice.createInjector(new DesignModule());
 
-        // Отримуємо екземпляр Customer через інжектор (замість new)
+        // --- КОНСОЛЬНА ЧАСТИНА (Ваш старий код) ---
+        // Отримуємо екземпляр Customer через інжектор
         Customer customer = injector.getInstance(Customer.class);
         
-        // Оскільки ми змінили конструктор, встановлюємо ім'я окремо (якщо у Person є setName)
-        // Якщо у Person немає setName, то ім'я залишиться "Замовник" з конструктора
         customer.setName("Іван"); 
-        // --------------------------
 
-        // Designer поки що залишаємо як є, або теж можна перевести на Guice, якщо для нього є логіка
         Designer designer = new Designer("Марія");
         
         // Демонстрація процесу
-        // (Тут при виклику fillBrief автоматично спрацює збереження в БД)
         Brief brief = customer.fillBrief(); 
         
-        // Перевірка (якщо у Brief є метод getDetails, або getTitle як ми робили раніше)
-        // Припускаємо, що у вашому Brief є getDetails(), якщо ні - змініть на getTitle()
         System.out.println("Деталі брифу: " + brief.getTitle()); 
         
         designer.sendConcepts();
@@ -39,7 +35,25 @@ public class Main {
         Guideline guideline = designer.createGuideline();
         guideline.download();
         
-        // Завершення контракту
         Person.finalizeContract();
+
+        // --- ВЕБ ЧАСТИНА (Нове завдання 2.6) ---
+        System.out.println("--- Запуск веб-сервера ---");
+        runWebMode(injector);
+    }
+
+    // Метод для запуску веб-сервера
+    private static void runWebMode(Injector injector) {
+        // 1. Отримуємо наш веб-сервер (Javalin) з інжектора
+        WebServer server = injector.getInstance(WebServer.class);
+
+        // 2. Отримуємо наше відображення (View), яке малює HTML-таблицю
+        PayrollWebView view = injector.getInstance(PayrollWebView.class);
+
+        // 3. Налаштовуємо: коли заходимо на головну сторінку "/", показуємо наш view
+        server.configure("/", view);
+
+        // 4. Запускаємо сервер на порту 8080
+        server.start(8080);
     }
 }
