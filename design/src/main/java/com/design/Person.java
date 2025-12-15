@@ -1,37 +1,29 @@
 package com.design;
 
-/**
- * Базовий клас Людина
- */
 public class Person {
-    private String name;
+    protected String name;
 
-    /**
-     * Конструктор
-     * @param name ім'я
-     */
+    // Конструктор за замовчуванням
+    public Person() {
+    }
+
+    // Конструктор з ім'ям
     public Person(String name) {
         this.name = name;
     }
 
-    /**
-     * Отримати ім'я
-     */
+    // Геттер (вирішує помилку cannot find symbol method getName)
     public String getName() {
         return name;
     }
 
-    /**
-     * Встановити нове ім'я (ЦЕЙ МЕТОД БУВ ВІДСУТНІЙ)
-     */
+    // Сеттер (вирішує помилку cannot find symbol method setName)
     public void setName(String name) {
         this.name = name;
     }
-    
-    /**
-     * Статичний метод для завершення контракту
-     */
+
+    // Цей метод викликається у вас в Main.java
     public static void finalizeContract() {
-        System.out.println("Контракт завершено. Всі сторони задоволені.");
+        System.out.println("Договір офіційно підписано та завірено.");
     }
 }

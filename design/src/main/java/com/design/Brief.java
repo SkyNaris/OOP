@@ -1,43 +1,30 @@
 package com.design;
 
-/**
- * Клас технічного завдання (Бриф)
- */
 public class Brief {
+    private int id; // Додаємо ID для бази даних
     private String title;
     private String description;
 
-    /**
-     * Конструктор
-     * @param title Назва проєкту
-     */
+    // Конструктор для створення нового брифу (без ID)
     public Brief(String title) {
         this.title = title;
-        // Оскільки у Customer.java ви передаєте тільки один параметр,
-        // заповнимо опис значенням за замовчуванням, щоб не було помилок в БД
         this.description = "Опис проєкту: " + title;
     }
 
-    /**
-     * Конструктор з двома параметрами (на майбутнє)
-     */
     public Brief(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-    // Геттер для заголовка (потрібен для DesignService)
-    public String getTitle() {
-        return title;
+    // Конструктор для витягування з БД (з ID)
+    public Brief(int id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
 
-    // Геттер для опису (потрібен для DesignService)
-    public String getDescription() {
-        return description;
-    }
-    
-    // Метод для сумісності, якщо десь використовується getDetails
-    public String getDetails() {
-        return description;
-    }
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getDetails() { return description; }
 }
